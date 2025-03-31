@@ -1,0 +1,58 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "logicAppName": {
+      "type": "string",
+      "defaultValue": "my-logic-app",
+      "metadata": {
+        "description": "Name of the Logic App"
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "East US",
+      "metadata": {
+        "description": "Azure region to deploy the Logic App"
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Logic/workflows",
+      "apiVersion": "2019-05-01",
+      "name": "[parameters('logicAppName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "state": "Enabled",
+        "definition": {
+          "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowDefinition.json#",
+          "contentVersion": "1.0.0.0",
+          "actions": {
+            "Response": {
+              "runAfter": {},
+              "metadata": {},
+              "type": "Response",
+              "inputs": {
+                "statusCode": 200,
+                "body": {
+                  "message": "Hello from Logic App!"
+                }
+              }
+            }
+          },
+          "triggers": {
+            "When_a_HTTP_request_is_received": {
+              "metadata": {},
+              "type": "Request",
+              "kind": "Http",
+              "inputs": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
